@@ -1,5 +1,5 @@
 package gdx.movement;
-//package com.mygdx.game;
+
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -19,8 +19,8 @@ public class GdxMovement extends ApplicationAdapter {
     Texture BackGround;
     TextureRegion[] frames;
     TextureRegion CurrentFrame;
-    float SpriteX = 0;
-    float SpriteY = 0;
+    float SpriteX = 550;
+    float SpriteY = 400;
     float SpriteSpeed = 150f;
     float Time = 0f;
     Animation animation;
@@ -54,53 +54,80 @@ public class GdxMovement extends ApplicationAdapter {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         CurrentFrame = animation.getKeyFrame(0);
-        
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-            SpriteX -= Gdx.graphics.getDeltaTime() * SpriteSpeed;
-            CurrentFrame = animation.getKeyFrame(8 + Time);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-            SpriteX += Gdx.graphics.getDeltaTime() * SpriteSpeed;
-            CurrentFrame = animation.getKeyFrame(12 + Time);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
-            SpriteY += Gdx.graphics.getDeltaTime() * SpriteSpeed;
-            CurrentFrame = animation.getKeyFrame(4 + Time);
-        }
-            //else if(nH == ContainY(nX, nY)){
-                
-        //}
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
-            SpriteY -= Gdx.graphics.getDeltaTime() * SpriteSpeed;
-            CurrentFrame = animation.getKeyFrame(0 + Time);
-            //else if(nH == ContainY(nX, nY)){
-        }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            if (isHitLeft(SpriteX, SpriteY)) {
+                SpriteSpeed = 150f;
+                SpriteX -= Gdx.graphics.getDeltaTime() * SpriteSpeed;
+                CurrentFrame = animation.getKeyFrame(8 + Time);
+            } else {
+                SpriteSpeed = 0f;
+                SpriteX += 1;
+                SpriteSpeed = 150f;
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            if (isHitRight(SpriteX, SpriteY)) {
+                SpriteX += Gdx.graphics.getDeltaTime() * SpriteSpeed;
+                CurrentFrame = animation.getKeyFrame(12 + Time);
+            } else {
+                SpriteSpeed = 0f;
+                SpriteX -= 1;
+                SpriteSpeed = 150f;
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            if (isHitTop(SpriteX, SpriteY)) {
+                SpriteY += Gdx.graphics.getDeltaTime() * SpriteSpeed;
+                CurrentFrame = animation.getKeyFrame(4 + Time);
+            } else {
+                SpriteSpeed = 0f;
+                SpriteY -= 1;
+                SpriteSpeed = 150f;
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            if (isHitBottom(SpriteX, SpriteY)) {
+                SpriteY -= Gdx.graphics.getDeltaTime() * SpriteSpeed;
+                CurrentFrame = animation.getKeyFrame(0 + Time);
+                //else if(nH == ContainY(nX, nY)){
+            } else {
+                SpriteSpeed = 0f;
+                SpriteY += 1;
+                SpriteSpeed = 150f;
+            }
+        }
         batch.begin();
         batch.draw(BackGround, 0, 0, nW, nH);
         batch.draw(CurrentFrame, (int) SpriteX, (int) SpriteY);
         batch.end();
-        System.out.println(SpriteX);
-        System.out.println(SpriteY);
     }
 
-    public boolean ContainX(int nXMin, int nXMax) {
-       if (SpriteX >= 1200) {
-            SpriteSpeed = 0f;
-        } else if (SpriteX <= 0) {
-            SpriteSpeed = 0f;
+    public boolean isHitLeft(float SpriteX, float SpriteY) {
+        if (SpriteX <= 42 && SpriteY >= -10) {
+            return false;
         }
-        return false;
-    }public boolean ContainY(int nYMin, int nYMax){
-         if (SpriteY >= 800) {
-            SpriteSpeed = 0f;
-        } else if (SpriteY <= 0) {
-            SpriteSpeed = 0f;
+        return true;
+    }
+
+    public boolean isHitRight(float SpriteX, float SpriteY) {
+        if (SpriteX >= 1115 && SpriteY >= -10) {
+            return false;
         }
-        return false;
+        return true;
+    }
+
+    public boolean isHitTop(float SpriteX, float SpriteY) {
+        if (SpriteX >= -10 && SpriteY >= 712) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isHitBottom(float SpriteX, float SpriteY) {
+        if (SpriteX >= -10 && SpriteY <= 63) {
+            return false;
+        }
+        return true;
     }
 }
-//Left wall: X= -5 Y = 0 to 425
-//Right wall: X = 600 Y = 0 to 425
-//Bottom: X = 5 to 600 Y = -5
-//Top
